@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function getRole()
+    {
+        return $this->roles->first()->name;
+    }
 }
