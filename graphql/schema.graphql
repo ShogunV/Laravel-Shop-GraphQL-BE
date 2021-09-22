@@ -13,6 +13,14 @@ type Query {
     product(id: ID @eq): Product @find
 }
 
+type Mutation {
+    login(input: LoginInput! @spread): User!  @field(resolver: "App\\GraphQL\\Mutations\\Login")
+    register(input: RegisterInput! @spread): User!  @field(resolver: "App\\GraphQL\\Mutations\\Register")
+    forgotPassword(input: ForgotPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ForgotPassword")
+    resetPassword(input: ResetPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ResetPassword")
+    logout: GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\Logout")
+}
+
 type User {
     id: ID!
     name: String
@@ -35,4 +43,21 @@ type Product {
 type Category {
     id: ID!
     title: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    name: String
+    email: String!
+    password: String!
+    password_confirmation: String!
+}
+
+type GeneralResponse {
+    error: Boolean!
+    data: String!
 }
