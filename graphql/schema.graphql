@@ -14,11 +14,11 @@ type Query {
 }
 
 type Mutation {
-    login(input: LoginInput! @spread): User!  @field(resolver: "App\\GraphQL\\Mutations\\Login")
-    register(input: RegisterInput! @spread): User!  @field(resolver: "App\\GraphQL\\Mutations\\Register")
+    login(input: LoginInput! @spread): User! @field(resolver: "App\\GraphQL\\Mutations\\Login")
+    register(input: RegisterInput! @spread): User! @field(resolver: "App\\GraphQL\\Mutations\\Register")
     forgotPassword(input: ForgotPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ForgotPassword")
     resetPassword(input: ResetPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ResetPassword")
-    logout: GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\Logout")
+    logout: GeneralResponse! @authenticated @field(resolver: "App\\GraphQL\\Mutations\\Logout")
 }
 
 type User {
@@ -55,6 +55,17 @@ input RegisterInput {
     email: String!
     password: String!
     password_confirmation: String!
+}
+
+input ForgotPasswordInput {
+    email: String!
+}
+
+input ResetPasswordInput {
+    email: String!
+    password: String!
+    password_confirmation: String!
+    token: String!
 }
 
 type GeneralResponse {
