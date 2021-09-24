@@ -19,6 +19,7 @@ type Mutation {
     forgotPassword(input: ForgotPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ForgotPassword")
     resetPassword(input: ResetPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ResetPassword")
     logout: GeneralResponse! @authenticated @field(resolver: "App\\GraphQL\\Mutations\\Logout")
+    checkout(input: CheckoutInput! @spread): GeneralResponse! @authenticated @field(resolver: "App\\GraphQL\\Mutations\\Checkout")
 }
 
 type User {
@@ -38,6 +39,14 @@ type Product {
     price: Float!
     discount: Int
     image: String
+}
+
+input CartProduct {
+    id: ID!
+    title: String
+    price: Float!
+    discount: Int
+    quantity: Int!
 }
 
 type Category {
@@ -66,6 +75,12 @@ input ResetPasswordInput {
     password: String!
     password_confirmation: String!
     token: String!
+}
+
+input CheckoutInput {
+    cart: [CartProduct]
+    total: Int!
+    totalQuantity: Int!
 }
 
 type GeneralResponse {
