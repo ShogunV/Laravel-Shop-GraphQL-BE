@@ -4,13 +4,17 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
+#import user.graphql
+#import product.graphql
+
 type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
     categories: [Category!]! @all
     category(id: ID @eq): Category @find
     products(category: String): [Product!]! @field(resolver: "App\\GraphQL\\Queries\\Products")
     product(id: ID @eq): Product @find
+    adminProducts: [Product!]! @all @admin
+    adminUsers: [User!]! @all @admin
+    adminOrders: [UserOrder!]! @admin @field(resolver: "App\\GraphQL\\Queries\\Orders")
 }
 
 type Mutation {
@@ -20,70 +24,4 @@ type Mutation {
     resetPassword(input: ResetPasswordInput! @spread): GeneralResponse!  @field(resolver: "App\\GraphQL\\Mutations\\ResetPassword")
     logout: GeneralResponse! @authenticated @field(resolver: "App\\GraphQL\\Mutations\\Logout")
     checkout(input: CheckoutInput! @spread): GeneralResponse! @authenticated @field(resolver: "App\\GraphQL\\Mutations\\Checkout")
-}
-
-type User {
-    id: ID!
-    name: String
-    email: String!
-    created_at: DateTime!
-    updated_at: DateTime!
-    role: String @method(name: "getRole")
-}
-
-type Product {
-    id: ID!
-    title: String
-    description: String
-    category_id: Int!
-    price: Float!
-    discount: Int
-    image: String
-}
-
-input CartProduct {
-    id: ID!
-    title: String
-    price: Float!
-    discount: Int
-    quantity: Int!
-}
-
-type Category {
-    id: ID!
-    title: String!
-}
-
-input LoginInput {
-    email: String!
-    password: String!
-}
-
-input RegisterInput {
-    name: String
-    email: String!
-    password: String!
-    password_confirmation: String!
-}
-
-input ForgotPasswordInput {
-    email: String!
-}
-
-input ResetPasswordInput {
-    email: String!
-    password: String!
-    password_confirmation: String!
-    token: String!
-}
-
-input CheckoutInput {
-    cart: [CartProduct]
-    total: Int!
-    totalQuantity: Int!
-}
-
-type GeneralResponse {
-    error: Boolean!
-    data: String!
 }
